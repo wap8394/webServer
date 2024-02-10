@@ -30,14 +30,16 @@ def webServer(port=13331):
             # opens the client requested file.
             # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
             f = open(filename[1:],"r") # fill in start #fill in end
-            filecontent = f.read()
-            successfulrequest = "HTTP/1.1 200 OK\r\n\r\n" + str(filecontent)
+            filecontent = str(f.read())
+            successfulrequest = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n Server: Apache/2.4.6\r\nConnection: keep-alive\r\n\r\n"
                     # This variable can store the headers you want to send for any valid or invalid request.   What header should be sent for a response that is ok?
                     # Fill in start
 
                      # Content-Type is an example on how to send a header as bytes. There are more!
-            outputdata=b"Content-Type: text/html; charset=UTF-8\r\n\r\n Server: Apache/2.4.6\r\n\r\nConnection: keep-alive\r\n\r\n"
+            headerdata="Content-Type: text/html; charset=UTF-8\r\n\r\n Server: Apache/2.4.6\r\n\r\nConnection: keep-alive\r\n\r\n"
             connectionSocket.send(successfulrequest.encode('utf-8'))
+            #connectionSocket.send(headerdata.encode('utf-8'))
+            connectionSocket.send(filecontent.encode('utf-8'))
             # connectionSocket.send(outputdata.encode('utf-8'))
 
             # Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
